@@ -1,3 +1,8 @@
+'''
+Created on Nov 28, 2010
+Adaboost is short for Adaptive Boosting
+@author: Peter
+'''
 from numpy import *
 
 def loadSimpData():
@@ -23,8 +28,8 @@ def loadDataSet(fileName):      #general function to parse tab -delimited floats
     return dataMat,labelMat
 
 def stumpClassify(dataMatrix,dimen,threshVal,threshIneq):#just classify the data
-    retArray = ones((shape(dataMatrix)[0],1))
-    if threshIneq == 'lt':
+    retArray = ones((shape(dataMatrix)[0],1))#数组过滤
+    if threshIneq == 'lt':#判断方向（因为也不能确定大于是正还是小于是正，所以要做两个）
         retArray[dataMatrix[:,dimen] <= threshVal] = -1.0
     else:
         retArray[dataMatrix[:,dimen] > threshVal] = -1.0
@@ -44,8 +49,8 @@ def buildStump(dataArr,classLabels,D):
                 threshVal = (rangeMin + float(j) * stepSize)
                 predictedVals = stumpClassify(dataMatrix,i,threshVal,inequal)#call stump classify with i, j, lessThan
                 errArr = mat(ones((m,1)))
-                errArr[predictedVals == labelMat] = 0
-                weightedError = D.T*errArr  #calc total error multiplied by D
+                errArr[predictedVals == labelMat] = 0#计算不等的个数
+                weightedError = D.T*errArr  #calc total error multiplied by D，带权值的误差
                 #print "split: dim %d, thresh %.2f, thresh ineqal: %s, the weighted error is %.3f" % (i, threshVal, inequal, weightedError)
                 if weightedError < minError:
                     minError = weightedError
@@ -53,10 +58,10 @@ def buildStump(dataArr,classLabels,D):
                     bestStump['dim'] = i
                     bestStump['thresh'] = threshVal
                     bestStump['ineq'] = inequal
-    return bestStump,minError,bestClasEst
+    return bestStump,minError,bestClasEst#返回需要的数据，特征，特征值，特征方向，大小，预测数据
 
 
-def adaBoostTrainDS(dataArr,classLabels,numIt=40):
+def adaBoostTrainDS(dataArr,classLabels,numIt=40):#多个分类器的训练过程，下个分类器继承上个分类器的权值。这样分类器就不一样了
     weakClassArr = []
     m = shape(dataArr)[0]
     D = mat(ones((m,1))/m)   #init D to all equal
@@ -78,7 +83,7 @@ def adaBoostTrainDS(dataArr,classLabels,numIt=40):
         errorRate = aggErrors.sum()/m
         print ("total error: ",errorRate)
         if errorRate == 0.0: break
-    return weakClassArr,aggClassEst
+    return weakClassArr,aggClassEst#返回一个数据所有分类器的判断
 
 def adaClassify(datToClass,classifierArr):
     dataMatrix = mat(datToClass)#do stuff similar to last aggClassEst in adaBoostTrainDS
@@ -90,7 +95,7 @@ def adaClassify(datToClass,classifierArr):
                                  classifierArr[i]['ineq'])#call stump classify
         aggClassEst += classifierArr[i]['alpha']*classEst
         print (aggClassEst)
-    return sign(aggClassEst)
+    return sign(aggClassEst)#最终结果。
 
 def plotROC(predStrengths, classLabels):
     import matplotlib.pyplot as plt
