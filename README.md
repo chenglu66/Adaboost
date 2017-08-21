@@ -40,7 +40,12 @@ AUC值越大，当前分类算法越有可能将正样本排在负样本前面�
 当分类器是10的AUC是0.86
 当分类器是50时AUC是0.89
 当然这只是训练的曲线那么测试集上的曲线他们表现怎么样？
-
+![image](https://github.com/chenglu66/Adaboost/blob/master/testroc10.png)
+AUC大小是0.7627
+![image](https://github.com/chenglu66/Adaboost/blob/master/testroc50.png)
+AUC大小是0.8025
+说了折磨多还没说AUC怎么计算：
+其实就是曲线的面积，因为随机的是0.5
 下面是基于代价的分类器，
 
 
