@@ -33,11 +33,10 @@ AUC值越大，当前分类算法越有可能将正样本排在负样本前面�
 当测试集中的正负样本的分布变换的时候，ROC曲线能够保持不变。在实际的数据集中经常会出现样本类不平衡
 ，即正负样本比例差距较大，而且测试数据中的正负样本也可能随着时间变化。
 总之就是roc不会因为数据集的变化产生较大的变化，所以更加有普遍性。
-
-
-
-
-
+![image](https://github.com/chenglu66/Adaboost/blob/master/roc10.png)
+把分类器的数量设定为50时
+![image](https://github.com/chenglu66/Adaboost/blob/master/roc2.png)
+仔细观察发现：
 
 下面是基于代价的分类器，
 
